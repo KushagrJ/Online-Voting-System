@@ -2,9 +2,9 @@ const anyone_can_vote = document.getElementById("anyone-can-vote");
 
 anyone_can_vote.addEventListener("click", () => {
     if (anyone_can_vote.checked === true) {
-        const add_voter = document.getElementById("add-voter");
-        if (add_voter) {
-            add_voter.remove();
+        const add_voter_button = document.getElementById("add-voter");
+        if (add_voter_button) {
+            add_voter_button.remove();
         }
 
         const main_div = document.getElementById("div-for-voters");
@@ -12,14 +12,15 @@ anyone_can_vote.addEventListener("click", () => {
             main_div.remove();
         }
     } else {
-        const add_voter = document.createElement("span");
-        add_voter.setAttribute("class", "btn btn-info");
-        add_voter.setAttribute("id", "add-voter");
-        add_voter.append(document.createTextNode("Add Voter"));
+        const add_voter_button = document.createElement("span");
+        add_voter_button.setAttribute("class", "btn btn-info");
+        add_voter_button.setAttribute("id", "add-voter");
+        add_voter_button.append(document.createTextNode("Add Voter"));
 
         const horizontal_rule =
             document.getElementById("horizontal-rule-for-add-voter");
-        horizontal_rule.parentNode.insertBefore(add_voter, horizontal_rule);
+        horizontal_rule.parentNode.insertBefore(add_voter_button,
+            horizontal_rule);
 
         let voter_number = initial_voters;
 
@@ -45,7 +46,6 @@ anyone_can_vote.addEventListener("click", () => {
                 main_div = document.createElement("div");
                 main_div.setAttribute("class", "row");
                 main_div.setAttribute("id", "div-for-voters");
-                const add_voter_button = document.getElementById("add-voter");
                 add_voter_button.parentNode.insertBefore(main_div,
                     add_voter_button);
 
