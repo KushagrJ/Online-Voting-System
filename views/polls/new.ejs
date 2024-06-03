@@ -1,0 +1,195 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="row">
+    <h1 class="text-center mb-3">New Poll</h1>
+
+    <div class="col-6 offset-3">
+        <form class="needs-validation" action="/polls" method="POST" enctype="multipart/form-data" novalidate>
+            <div class="mb-3">
+                <label class="form-label" for="poll-title">
+                    Title
+                </label>
+
+                <input class="form-control" type="text" id="poll-title" name="poll[title]" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="poll-images">
+                    Images
+                </label>
+
+                <input class="form-control" type="file" id="poll-images" name="poll-images" multiple>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label" for="poll-description">
+                    Description
+                </label>
+
+                <textarea class="form-control" type="text" id="poll-description" name="poll[description]"></textarea>
+            </div>
+
+            <hr>
+
+            <!--
+            See add-candidates.js
+
+            <div class="row">
+                <div class="col-6 mb-3">
+                    <label class="form-label" for="candidates-0-title">
+                        Candidate Title
+                    </label>
+
+                    <input class="form-control" type="text" id="candidates-0-title" name="candidates[0][title]"
+                        required="">
+                </div>
+
+                <div class="col-6 mb-3">
+                    <label class="form-label" for="candidates-0-images">
+                        Images
+                    </label>
+
+                    <input class="form-control" type="file" id="candidates-0-images" name="candidates-0-images"
+                        multiple="">
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label" for="candidates-0-description">
+                        Description
+                    </label>
+
+                    <input class="form-control" type="text" id="candidates-0-description"
+                        name="candidates[0][description]">
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="row">
+                <div class="col-6 mb-3">
+                    <label class="form-label" for="candidates-1-title">
+                        Candidate Title
+                    </label>
+
+                    <input class="form-control" type="text" id="candidates-1-title" name="candidates[1][title]"
+                        required="">
+                </div>
+
+                <div class="col-6 mb-3">
+                    <label class="form-label" for="candidates-1-images">
+                        Images
+                    </label>
+
+                    <input class="form-control" type="file" id="candidates-1-images" name="candidates-1-images"
+                        multiple="">
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label" for="candidates-1-description">
+                        Description
+                    </label>
+
+                    <input class="form-control" type="text" id="candidates-1-description"
+                        name="candidates[1][description]">
+                </div>
+            </div>
+
+            <hr>
+            -->
+
+            <span class="btn btn-info" id="add-candidate">Add Candidate</span>
+
+            <hr>
+
+            <div class="mb-2">
+                <label class="form-check-label" for="multiple-votes-allowed">
+                    Are multiple votes allowed?
+                </label>
+
+                <input class="form-check-input" type="checkbox" value="" id="multiple-votes-allowed"
+                    name="multiple-votes-allowed">
+            </div>
+
+            <div class="mb-2">
+                <label class="form-check-label" for="organiser-can-vote">
+                    Can the organiser cast a vote?
+                </label>
+
+                <input class="form-check-input" type="checkbox" value="" id="organiser-can-vote"
+                    name="organiser-can-vote">
+            </div>
+
+            <div class="mb-2">
+                <label class="form-check-label" for="ongoing-poll-results-visible">
+                    Should ongoing poll results be visible?
+                </label>
+
+                <input class="form-check-input" type="checkbox" value="" id="ongoing-poll-results-visible"
+                    name="ongoing-poll-results-visible">
+            </div>
+
+            <div class="mb-2">
+                <label class="form-check-label" for="anonymous-votes">
+                    Should votes remain anonymous?
+                </label>
+
+                <input class="form-check-input" type="checkbox" value="" id="anonymous-votes" name="anonymous-votes">
+            </div>
+
+            <hr>
+
+            <div class="mb-3">
+                <label class="form-check-label" for="anyone-can-vote">
+                    Can anyone cast a vote?
+                </label>
+
+                <input class="form-check-input" type="checkbox" value="" id="anyone-can-vote" name="anyone-can-vote"
+                    checked>
+            </div>
+
+            <!--
+            See add-voters.js
+
+            <div class="row" id="div-for-voters">
+                <label class="form-label">Voters</label>
+
+                <div class="col-6 mb-3">
+                    <select class="form-select" id="voters-0" name="voters[0]">
+                        <option value="b">b</option>
+                        <option value="c">c</option>
+                        <option value="d">d</option>
+                        <option value="e">e</option>
+                        <option value="f">f</option>
+                    </select>
+                </div>
+
+                <div class="col-6 mb-3">
+                    <select class="form-select" id="voters-1" name="voters[1]">
+                        <option value="b">b</option>
+                        <option value="c">c</option>
+                        <option value="d">d</option>
+                        <option value="e">e</option>
+                        <option value="f">f</option>
+                    </select>
+                </div>
+            </div>
+
+            <span class="btn btn-info" id="add-voter">Add Voter</span>
+            -->
+
+            <hr id="horizontal-rule-for-add-voter">
+
+            <div class="mb-3">
+                <button class="btn btn-success">Add Poll</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const initial_candidates = <%= initial_candidates %>;
+    const initial_voters = <%= initial_voters %>;
+    const voters = <% - JSON.stringify(voters) %>;
+</script>
+<script src="/scripts/add-candidate.js"></script>
+<script src="/scripts/add-voter.js"></script>
