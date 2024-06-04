@@ -16,9 +16,7 @@ router.get("/new", is_logged_in, async (req, res, next) => {
         let voters = await User.find({}).distinct("username");
         voters = voters.filter(item => item !== req.user.username);
 
-        res.render("polls/new", {
-            initial_candidates: 0, initial_voters: 0, voters
-        });
+        res.render("polls/new", { voters });
     } catch (err) {
         next(err);
     }

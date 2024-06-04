@@ -4,7 +4,8 @@
     <h1 class="text-center mb-3">New Poll</h1>
 
     <div class="col-6 offset-3">
-        <form class="needs-validation" action="/polls" method="POST" enctype="multipart/form-data" novalidate>
+        <form class="needs-validation" action="/polls" method="POST" enctype="multipart/form-data" id="add-poll-form"
+            novalidate>
             <div class="mb-3">
                 <label class="form-label" for="poll-title">
                     Title
@@ -179,17 +180,16 @@
 
             <hr id="horizontal-rule-for-add-voter">
 
-            <div class="mb-3">
-                <button class="btn btn-success">Add Poll</button>
-            </div>
+            <span class="mb-3 btn btn-success" id="add-poll">Add Poll</span>
         </form>
     </div>
 </div>
 
 <script>
-    const initial_candidates = <%= initial_candidates %>;
-    const initial_voters = <%= initial_voters %>;
+    const initial_candidates = 0;
+    const initial_voters = 0;
     const voters = <%- JSON.stringify(voters) %>;
 </script>
 <script src="/scripts/add-candidate.js"></script>
 <script src="/scripts/add-voter.js"></script>
+<script src="/scripts/ensure-at-least-2-candidates-and-1-voter.js"></script>

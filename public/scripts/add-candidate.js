@@ -70,3 +70,13 @@ add_candidate_button.addEventListener("click", () => {
 
     ++candidate_number;
 });
+
+// See ensure-at-least-2-candidates-and-1-voter.js
+add_candidate_button.addEventListener("click", () => {
+    const alert_for_candidates =
+        document.getElementById("alert-for-candidates");
+
+    if (alert_for_candidates) {
+        alert_for_candidates.remove();
+    }
+});

@@ -11,6 +11,12 @@ anyone_can_vote.addEventListener("click", () => {
         if (main_div) {
             main_div.remove();
         }
+
+        // See ensure-at-least-2-candidates-and-1-voter.js
+        const alert_for_voters = document.getElementById("alert-for-voters");
+        if (alert_for_voters) {
+            alert_for_voters.remove();
+        }
     } else {
         const add_voter_button = document.createElement("span");
         add_voter_button.setAttribute("class", "btn btn-info");
@@ -24,7 +30,7 @@ anyone_can_vote.addEventListener("click", () => {
 
         let voter_number = initial_voters;
 
-        document.getElementById("add-voter").addEventListener("click", () => {
+        add_voter_button.addEventListener("click", () => {
             const div = document.createElement("div");
             div.setAttribute("class", "col-6 mb-3");
 
@@ -60,6 +66,16 @@ anyone_can_vote.addEventListener("click", () => {
             main_div.appendChild(div);
 
             ++voter_number;
+        });
+
+        // See ensure-at-least-2-candidates-and-1-voter.js
+        add_voter_button.addEventListener("click", () => {
+            const alert_for_voters =
+                document.getElementById("alert-for-voters");
+
+            if (alert_for_voters) {
+                alert_for_voters.remove();
+            }
         });
     }
 });
