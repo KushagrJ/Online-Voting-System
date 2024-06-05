@@ -78,6 +78,8 @@ router.get("/:id/edit", is_logged_in, is_existing_poll, is_poll_organiser,
             let voters = await User.find({}).distinct("username");
             voters = voters.filter(item => item !== req.user.username);
 
+            await res.locals.poll.populate("voters");
+
             res.render("polls/edit", { poll: res.locals.poll, voters });
         } catch (err) {
             next(err);

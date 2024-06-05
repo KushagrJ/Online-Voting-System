@@ -1,6 +1,6 @@
-const add_poll_button = document.getElementById("add-poll");
+const add_or_update_poll_button = document.getElementById("add-or-update-poll");
 
-add_poll_button.addEventListener("click", () => {
+add_or_update_poll_button.addEventListener("click", () => {
     let i = 0;
 
     while (document.getElementById(`candidates-${i}-title`)) {
@@ -23,7 +23,8 @@ add_poll_button.addEventListener("click", () => {
                 "fade show");
             div.setAttribute("id", "alert-for-candidates");
             div.setAttribute("role", "alert");
-            add_poll_button.parentNode.insertBefore(div, add_poll_button);
+            add_or_update_poll_button.parentNode.insertBefore(div,
+                add_or_update_poll_button);
 
             div.appendChild(document.createTextNode("You must have at least " +
                 "2 candidates!"));
@@ -41,7 +42,8 @@ add_poll_button.addEventListener("click", () => {
                 "fade show");
             div.setAttribute("id", "alert-for-voters");
             div.setAttribute("role", "alert");
-            add_poll_button.parentNode.insertBefore(div, add_poll_button);
+            add_or_update_poll_button.parentNode.insertBefore(div,
+                add_or_update_poll_button);
 
             div.appendChild(document.createTextNode("You must have at least " +
                 "1 voter!"));
@@ -53,6 +55,6 @@ add_poll_button.addEventListener("click", () => {
             div.appendChild(button);
         }
     } else {
-        document.getElementById("add-poll-form").requestSubmit();
+        document.getElementById("poll-form").requestSubmit();
     }
 });

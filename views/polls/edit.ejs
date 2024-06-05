@@ -1,0 +1,158 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="row">
+    <h1 class="text-center mb-3">Edit Poll</h1>
+
+    <div class="col-6 offset-3">
+        <form class="needs-validation" action="/polls/<%= poll._id %>?_method=PUT" method="POST"
+            enctype="multipart/form-data" id="poll-form" novalidate>
+            <div class="mb-3">
+                <label class="form-label" for="poll-title">
+                    Title
+                </label>
+
+                <input class="form-control" type="text" id="poll-title" name="poll[title]" value="<%= poll.title %>"
+                    required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="poll-images">
+                    Images
+                </label>
+
+                <input class="form-control" type="file" id="poll-images" name="poll-images" multiple>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label" for="poll-description">
+                    Description
+                </label>
+
+                <textarea class="form-control" type="text" id="poll-description"
+                    name="poll[description]"><%= poll.description %></textarea>
+            </div>
+
+            <hr>
+
+            <% for (let i = 0; i < poll.candidates.length; ++i) { %>
+            <div class="row">
+                <div class="col-6 mb-3">
+                    <label class="form-label" for="candidates-<%= i %>-title">
+                        Candidate Title
+                    </label>
+
+                    <input class="form-control" type="text" id="candidates-<%= i %>-title"
+                        name="candidates[<%= i %>][title]" value="<%= poll.candidates[i].title %>" required>
+                </div>
+
+                <div class="col-6 mb-3">
+                    <label class="form-label" for="candidates-<%= i %>-images">
+                        Images
+                    </label>
+
+                    <input class="form-control" type="file" id="candidates-<%= i %>-images"
+                        name="candidates-<%= i %>-images" multiple>
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label" for="candidates-<%= i %>-description">
+                        Description
+                    </label>
+
+                    <input class="form-control" type="text" id="candidates-<%= i %>-description"
+                        name="candidates[<%= i %>][description]" value="<%= poll.candidates[i].description %>">
+                </div>
+            </div>
+
+            <hr>
+            <% } %>
+
+            <span class="btn btn-info" id="add-candidate">Add Candidate</span>
+
+            <hr>
+
+            <div class="mb-2">
+                <input class="form-check-input" type="checkbox" value="" id="multiple-votes-allowed"
+                    name="multiple-votes-allowed" <%= poll.multiple_votes_allowed ? "checked" : "" %>>
+
+                <label class="form-check-label" for="multiple-votes-allowed">
+                    Are multiple votes allowed?
+                </label>
+            </div>
+
+            <div class="mb-2">
+                <input class="form-check-input" type="checkbox" value="" id="organiser-can-vote"
+                    name="organiser-can-vote" <%= poll.organiser_can_vote ? "checked" : "" %>>
+
+                <label class="form-check-label" for="organiser-can-vote">
+                    Can the organiser cast a vote?
+                </label>
+            </div>
+
+            <div class="mb-2">
+                <input class="form-check-input" type="checkbox" value="" id="ongoing-poll-results-visible"
+                    name="ongoing-poll-results-visible" <%= poll.ongoing_poll_results_visible ? "checked" : "" %>>
+
+                <label class="form-check-label" for="ongoing-poll-results-visible">
+                    Should ongoing poll results be visible?
+                </label>
+            </div>
+
+            <div class="mb-2">
+                <input class="form-check-input" type="checkbox" value="" id="anonymous-votes" name="anonymous-votes"
+                    <%= poll.anonymous_votes ? "checked" : "" %>>
+
+                <label class="form-check-label" for="anonymous-votes">
+                    Should votes remain anonymous?
+                </label>
+            </div>
+
+            <hr>
+
+            <div class="mb-3">
+                <input class="form-check-input" type="checkbox" value="" id="anyone-can-vote" name="anyone-can-vote"
+                    <%= poll.anyone_can_vote ? "checked" : "" %>>
+
+                <label class="form-check-label" for="anyone-can-vote">
+                    Can anyone cast a vote?
+                </label>
+            </div>
+
+            <% if (!(poll.anyone_can_vote)) { %>
+            <div class="row" id="div-for-voters">
+                <label class="form-label">Voters</label>
+
+                <% for (let i = 0; i < poll.voters.length; ++i) { %>
+                <div class="col-6 mb-3">
+                    <select class="form-select" id="voters-<%= i %>" name="voters[<%= i %>]">
+                        <option value="<%= poll.voters[i].username %>"><%= poll.voters[i].username %></option>
+
+                        <% for (let voter of voters) { %>
+                        <% if (voter !== poll.voters[i].username) { %>
+                        <option value="<%= voter %>"><%= voter %></option>
+                        <% } %>
+                        <% } %>
+                    </select>
+                </div>
+                <% } %>
+            </div>
+
+            <span class="btn btn-info" id="add-voter">Add Voter</span>
+            <% } %>
+
+            <hr id="horizontal-rule-for-add-voter">
+
+            <span class="mb-3 btn btn-success" id="add-or-update-poll">Update Poll</span>
+        </form>
+    </div>
+</div>
+
+<script>
+    const initial_candidates = <%= poll.candidates.length %>;
+    const initial_voters = <%= poll.voters.length %>;
+    const voters = <%- JSON.stringify(voters) %>;
+</script>
+
+<script src="/scripts/add-candidate.js"></script>
+<script src="/scripts/add-voter.js"></script>
+<script src="/scripts/ensure-at-least-2-candidates-and-1-voter.js"></script>

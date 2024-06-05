@@ -1,5 +1,3 @@
-const ExpressError = require("../utils/express-error");
-
 const Poll = require("../models/poll");
 const Vote = require("../models/vote");
 
