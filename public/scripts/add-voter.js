@@ -2,7 +2,7 @@
 const add_voter_button = document.getElementById("add-voter");
 
 if (add_voter_button) {
-    // This has been copied from below
+    // This has mostly been copied from below
 
     let voter_number = initial_voters;
 
@@ -22,24 +22,7 @@ if (add_voter_button) {
         }
         div.appendChild(select);
 
-        let main_div;
-
-        if (voter_number === 0) {
-            main_div = document.createElement("div");
-            main_div.setAttribute("class", "row");
-            main_div.setAttribute("id", "div-for-voters");
-            add_voter_button.parentNode.insertBefore(main_div,
-                add_voter_button);
-
-            const label = document.createElement("label");
-            label.setAttribute("class", "form-label");
-            label.appendChild(document.createTextNode("Voters"));
-            main_div.appendChild(label);
-        } else {
-            main_div = document.getElementById("div-for-voters");
-        }
-
-        main_div.appendChild(div);
+        document.getElementById("div-for-voters").appendChild(div);
 
         ++voter_number;
     });

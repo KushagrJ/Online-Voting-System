@@ -71,8 +71,9 @@ PollSchema.post("findOneAndDelete", async function (poll) {
 
         for (let candidate of poll.candidates) {
             for (let image of candidate.images) {
-                await cloudinary.uploader.destroy(image.file_name,
-                    { invalidate: true });
+                await cloudinary.uploader.destroy(image.file_name, {
+                    invalidate: true
+                });
             }
         }
     }
