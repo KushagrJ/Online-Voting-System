@@ -22,6 +22,15 @@ if (add_voter_button) {
         }
         div.appendChild(select);
 
+        select.addEventListener("click", () => {
+            const alert_for_duplicate_voters =
+                document.getElementById("alert-for-duplicate-voters");
+
+            if (alert_for_duplicate_voters) {
+                alert_for_duplicate_voters.remove();
+            }
+        });
+
         document.getElementById("div-for-voters").appendChild(div);
 
         ++voter_number;
@@ -87,6 +96,15 @@ anyone_can_vote.addEventListener("click", () => {
                 select.appendChild(option);
             }
             div.appendChild(select);
+
+            select.addEventListener("click", () => {
+                const alert_for_duplicate_voters =
+                    document.getElementById("alert-for-duplicate-voters");
+
+                if (alert_for_duplicate_voters) {
+                    alert_for_duplicate_voters.remove();
+                }
+            });
 
             let main_div;
 

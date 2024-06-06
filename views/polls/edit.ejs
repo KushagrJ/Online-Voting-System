@@ -133,14 +133,8 @@
 
                 <% for (let i = 0; i < poll.voters.length; ++i) { %>
                 <div class="col-4 mb-3">
-                    <select class="form-select" id="voters-<%= i %>" name="voters[<%= i %>]">
+                    <select class="form-select" id="voters-<%= i %>" name="voters[<%= i %>]" disabled>
                         <option value="<%= poll.voters[i].username %>"><%= poll.voters[i].username %></option>
-
-                        <% for (let voter of voters) { %>
-                        <% if (voter !== poll.voters[i].username) { %>
-                        <option value="<%= voter %>"><%= voter %></option>
-                        <% } %>
-                        <% } %>
                     </select>
                 </div>
 
@@ -173,4 +167,4 @@
 
 <script src="/scripts/add-candidate.js"></script>
 <script src="/scripts/add-voter.js"></script>
-<script src="/scripts/ensure-at-least-2-candidates-and-1-voter.js"></script>
+<script src="/scripts/ensure-stuff.js"></script>
