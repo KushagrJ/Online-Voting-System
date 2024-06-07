@@ -62,11 +62,16 @@ const Vote = require("./vote");
 
 PollSchema.post("findOneAndDelete", async function (poll) {
     if (poll) {
-        await Vote.deleteMany({ _id: { $in: poll.votes } });
+        await Vote.deleteMany({
+            _id: {
+                $in: poll.votes
+            }
+        });
 
         for (let image of poll.images) {
-            await cloudinary.uploader.destroy(image.file_name,
-                { invalidate: true });
+            await cloudinary.uploader.destroy(image.file_name, {
+                invalidate: true
+            });
         }
 
         for (let candidate of poll.candidates) {

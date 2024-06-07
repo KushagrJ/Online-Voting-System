@@ -80,6 +80,27 @@ router.post("/", is_logged_in, upload.any(), async (req, res, next) => {
     }
 });
 
+router.get("/:id", is_existing_poll, async (req, res, next) => {
+    try {
+        await res.locals.poll.populate("voters");
+
+        await res.locals.poll.populate({
+            path: "votes",
+            populate: {
+                path: "voter"
+            }
+        });
+
+        await res.locals.poll.populate("organiser");
+
+        res.render("polls/show", {
+            poll: res.locals.poll
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
 router.get("/:id/edit", is_logged_in, is_existing_poll, is_poll_organiser,
     async (req, res, next) => {
         try {
@@ -108,10 +129,21 @@ router.put("/:id", is_logged_in, is_existing_poll, is_poll_organiser,
             poll.title = req.body.poll.title;
             poll.description = req.body.poll.description;
 
-            poll.multiple_votes_allowed =
+            const multiple_votes_allowed =
                 Object.hasOwn(req.body, "multiple-votes-allowed");
+            if (multiple_votes_allowed !== poll.multiple_votes_allowed) {
+                Vote.deleteMany({});
+            }
+            poll.multiple_votes_allowed = multiple_votes_allowed;
+
             poll.organiser_can_vote =
                 Object.hasOwn(req.body, "organiser-can-vote");
+            if (!(poll.organiser_can_vote)) {
+                Vote.deleteMany({
+                    voter: poll.organiser
+                });
+            }
+
             poll.ongoing_poll_results_visible =
                 Object.hasOwn(req.body, "ongoing-poll-results-visible");
             poll.anonymous_votes =

@@ -1,0 +1,150 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="row">
+    <div class="col-4">
+        <div class="row">
+            <div class="col-12 mb-3">
+                <div id="poll-carousel" class="carousel slide">
+                    <div class="carousel-inner">
+                        <% for (let i = 0; i < poll.images.length; ++i) { %>
+                        <div class="carousel-item <%= i === 0 ? "active" : "" %>">
+                            <img src="<%= (((poll.images)[i]).url).replace("/upload", "/upload/w_1280,h_720,c_fill") %>"
+                                class="d-block w-100" alt="">
+                        </div>
+                        <% } %>
+
+                        <% if (poll.images.length === 0) { %>
+                        <div class="carousel-item" active>
+                            <img src="<%= "https://res.cloudinary.com/dyhzti25i/image/upload/v1717773936/Online-Voting-System/0_fqcbnb.jpg".replace("/upload", "/upload/w_1280,h_720,c_fill") %>"
+                                class="d-block w-100" alt="">
+                        </div>
+                        <% } %>
+                    </div>
+
+                    <% if (poll.images.length > 1) { %>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#poll-carousel"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+
+                    <button class="carousel-control-next" type="button" data-bs-target="#poll-carousel"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                    <% } %>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><%= poll.title %></h5>
+                        <p class="card-text"><%= poll.description %></p>
+                    </div>
+
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Added by <%= poll.organiser.username %></li>
+                    </ul>
+
+                    <% if ((current_user) && (poll.organiser.equals(current_user))) { %>
+                    <div class="card-body">
+                        <% if (!(poll.concluded)) { %>
+                        <a class="card-link btn btn-primary" href="/polls/<%= poll._id %>/conclude">Conclude</a>
+                        <% } %>
+
+                        <a class="ms-1 card-link btn btn-info" href="/polls/<%= poll._id %>/edit">Edit</a>
+
+                        <form class="ms-1 d-inline" action="/polls/<%= poll._id %>?_method=DELETE" method="POST">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+
+                        <% if (!(poll.anyone_can_vote)) { %>
+                        <a class="ms-1 card-link btn btn-warning" data-bs-toggle="collapse" href="#eligible-voters"
+                            role="button" aria-expanded="false" aria-controls="eligible-voters">
+                            Eligible Voters
+                        </a>
+                        <% } %>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+
+            <% if ((current_user) && (poll.organiser.equals(current_user)) && !(poll.anyone_can_vote)) { %>
+            <div class="col-12 mb-3">
+                <div class="collapse" id="eligible-voters">
+                    <div class="card">
+                        <ul class="list-group list-group-flush">
+                            <% for (let voter of poll.voters) { %>
+                            <li class="list-group-item"><%= voter.username %></li>
+                            <% } %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+        </div>
+    </div>
+
+    <div class="col-4">
+        <% let current_user_is_eligible = false; %>
+        <% for (let voter of poll.voters) { %>
+        <% if (voter.equals(current_user)) { %>
+        <% current_user_is_eligible = true; %>
+        <% break; %>
+        <% } %>
+        <% } %>
+
+        <div class="row">
+            <% if ((current_user) && ((poll.organiser.equals(current_user)) || (poll.anyone_can_vote) || (current_user_is_eligible))) { %>
+            <% for (let x = 0; x < poll.candidates.length; ++x) { %>
+            <div class="col-6 mb-3">
+                <div class="card">
+                    <div id="candidates-<%= x %>-carousel" class="carousel slide">
+                        <div class="carousel-inner">
+                            <% for (let i = 0; i < poll.candidates[x].images.length; ++i) { %>
+                            <div class="carousel-item <%= i === 0 ? "active" : "" %>">
+                                <img src="<%= (((poll.candidates[x].images)[i]).url).replace("/upload", "/upload/w_1280,h_720,c_fill") %>"
+                                    class="d-block w-100" alt="">
+                            </div>
+                            <% } %>
+
+                            <% if (poll.candidates[x].images.length === 0) { %>
+                            <div class="carousel-item active">
+                                <img src="<%= "https://res.cloudinary.com/dyhzti25i/image/upload/v1717773936/Online-Voting-System/0_fqcbnb.jpg".replace("/upload", "/upload/w_1280,h_720,c_fill") %>"
+                                    class="d-block w-100" alt="">
+                            </div>
+                            <% } %>
+                        </div>
+
+                        <% if (poll.candidates[x].images.length > 1) { %>
+                        <button class="carousel-control-prev" type="button"
+                            data-bs-target="#candidates-<%= x %>-carousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+
+                        <button class="carousel-control-next" type="button"
+                            data-bs-target="#candidates-<%= x %>-carousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                        <% } %>
+                    </div>
+
+                    <div class="card-body">
+                        <h5 class="card-title"><%= x + 1 %>. <%= poll.candidates[x].title %></h5>
+                        <p class="card-text"><%= poll.candidates[x].description %></p>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+            <% } %>
+        </div>
+
+        <div class="row">
+            <% if ((current_user) && (((poll.organiser.equals(current_user)) && (poll.organiser_can_vote)) || (!(poll.organiser.equals(current_user)) && ((poll.anyone_can_vote) || (current_user_is_eligible))))) { %>
+            Cast Vote
+            <% } %>
+        </div>
+    </div>
+</div>
