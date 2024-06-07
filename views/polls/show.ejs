@@ -94,6 +94,14 @@
         <% } %>
         <% } %>
 
+        <% let current_user_has_already_voted = false; %>
+        <% for (let vote of poll.votes) { %>
+        <% if (vote.voter.equals(current_user)) { %>
+        <% current_user_has_already_voted = true; %>
+        <% break; %>
+        <% } %>
+        <% } %>
+
         <div class="row">
             <% if ((current_user) && ((poll.organiser.equals(current_user)) || (poll.anyone_can_vote) || (current_user_is_eligible))) { %>
             <% for (let x = 0; x < poll.candidates.length; ++x) { %>
@@ -140,9 +148,27 @@
             <% } %>
             <% } %>
 
-            <% if ((current_user) && (((poll.organiser.equals(current_user)) && (poll.organiser_can_vote)) || (!(poll.organiser.equals(current_user)) && ((poll.anyone_can_vote) || (current_user_is_eligible))))) { %>
-            <div class="col-12 mb-3">
-                Cast Vote
+            <% if ((current_user) && (((poll.organiser.equals(current_user)) && (poll.organiser_can_vote)) || (!(poll.organiser.equals(current_user)) && ((poll.anyone_can_vote) || (current_user_is_eligible)))) && !(current_user_has_already_voted)) { %>
+            <div class="col-12 mt-1 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Cast a vote!</h5>
+
+                        <form action="/polls/<%= poll._id %>/votes" method="POST">
+                            <% for (let x = 0; x < poll.candidates.length; ++x) { %>
+                            <input class="btn-check" type="<%= poll.multiple_votes_allowed ? "checkbox" : "radio" %>"
+                                id="candidates-<%= x %>"
+                                name="<%= poll.multiple_votes_allowed ? `candidates[${x}]` : "candidate" %>"
+                                autocomplete="off">
+
+                            <label class="btn btn-outline-primary mb-3 me-1" for="candidates-<%= x %>">
+                                <%= x + 1 %>. <%= poll.candidates[x].title %>
+                            </label>
+                            <% } %>
+                            <button class="btn btn-success">Submit</button>
+                        </form>
+                    </div>
+                </div>
             </div>
             <% } %>
         </div>
