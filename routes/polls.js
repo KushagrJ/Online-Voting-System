@@ -45,16 +45,6 @@ router.post("/", is_logged_in, upload.any(), async (req, res, next) => {
         poll.anyone_can_vote =
             Object.hasOwn(req.body, "anyone-can-vote");
 
-        if (!(poll.anyone_can_vote)) {
-            for (voter_username of req.body.voters) {
-                const voter = await User.findOne({
-                    username: voter_username
-                });
-
-                poll.voters.push(voter._id);
-            }
-        }
-
         for (image of req.files) {
             if (image.fieldname === "poll-images") {
                 poll.images.push({
@@ -68,6 +58,16 @@ router.post("/", is_logged_in, upload.any(), async (req, res, next) => {
                     url: image.path,
                     file_name: image.filename
                 });
+            }
+        }
+
+        if (!(poll.anyone_can_vote)) {
+            for (voter_username of req.body.voters) {
+                const voter = await User.findOne({
+                    username: voter_username
+                });
+
+                poll.voters.push(voter._id);
             }
         }
 
@@ -140,26 +140,6 @@ router.put("/:id", is_logged_in, is_existing_poll, is_poll_organiser,
                 });
             }
 
-            poll.voters = [];
-
-            if (!(poll.anyone_can_vote)) {
-                for (let i = 0; i < req.body.voters.length; ++i) {
-                    if (!(Object.hasOwn(req.body, `voters-${i}-delete`))) {
-                        const voter = await User.findOne({
-                            username: req.body.voters[i]
-                        });
-
-                        poll.voters.push(voter._id);
-                    }
-                }
-
-                await Vote.deleteMany({
-                    voter: {
-                        $nin: poll.voters
-                    }
-                });
-            }
-
             const poll_images = [];
 
             const candidates_images = [];
@@ -217,6 +197,26 @@ router.put("/:id", is_logged_in, is_existing_poll, is_poll_organiser,
                         poll.candidates[i].images = candidates_images[i];
                     }
                 }
+            }
+
+            poll.voters = [];
+
+            if (!(poll.anyone_can_vote)) {
+                for (let i = 0; i < req.body.voters.length; ++i) {
+                    if (!(Object.hasOwn(req.body, `voters-${i}-delete`))) {
+                        const voter = await User.findOne({
+                            username: req.body.voters[i]
+                        });
+
+                        poll.voters.push(voter._id);
+                    }
+                }
+
+                await Vote.deleteMany({
+                    voter: {
+                        $nin: poll.voters
+                    }
+                });
             }
 
             for (let i = poll.candidates.length - 1; i >= 0; --i) {

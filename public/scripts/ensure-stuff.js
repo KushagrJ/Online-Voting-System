@@ -1,5 +1,5 @@
-// ensure stuff === ensure at least 2 candidates, at least 1 voter and no
-// duplicate voters
+// ensure stuff === ensure at least 2 candidates, at least 1 voter, no empty
+// voters and no duplicate voters
 
 const add_or_update_poll_button = document.getElementById("add-or-update-poll");
 
@@ -102,12 +102,49 @@ add_or_update_poll_button.addEventListener("click", () => {
 
     ////////////////////////////////////////////////////////////////////////////
 
-    const voters = [];
-
     let x = 0;
 
     while (true) {
         const voter_select = document.getElementById(`voters-${x}`);
+
+        if (voter_select) {
+            if (voter_select.options[voter_select.selectedIndex].value === "") {
+                if (!(document.getElementById("alert-for-empty-voters"))) {
+                    const div = document.createElement("div");
+                    div.setAttribute("class", "alert alert-danger alert-dismissible " +
+                        "fade show");
+                    div.setAttribute("id", "alert-for-empty-voters");
+                    div.setAttribute("role", "alert");
+                    add_or_update_poll_button.parentNode.insertBefore(div,
+                        add_or_update_poll_button);
+
+                    div.appendChild(document.createTextNode("You cannot have " +
+                        "empty voters!"));
+                    const button = document.createElement("button");
+                    button.setAttribute("type", "button");
+                    button.setAttribute("class", "btn-close");
+                    button.setAttribute("data-bs-dismiss", "alert");
+                    button.setAttribute("aria-label", "Close");
+                    div.appendChild(button);
+                }
+
+                return;
+            }
+        } else {
+            break;
+        }
+
+        ++x;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+
+    const voters = [];
+
+    let y = 0;
+
+    while (true) {
+        const voter_select = document.getElementById(`voters-${y}`);
 
         if (voter_select) {
             voters.push(voter_select.options[voter_select.selectedIndex].value);
@@ -115,7 +152,7 @@ add_or_update_poll_button.addEventListener("click", () => {
             break;
         }
 
-        ++x;
+        ++y;
     }
 
     if (new Set(voters).size !== voters.length) {

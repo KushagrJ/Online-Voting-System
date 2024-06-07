@@ -14,15 +14,28 @@ if (add_voter_button) {
         select.setAttribute("class", "form-select");
         select.setAttribute("id", `voters-${voter_number}`);
         select.setAttribute("name", `voters[${voter_number}]`);
+
+        const empty_option = document.createElement("option");
+        empty_option.setAttribute("value", "");
+        select.appendChild(empty_option);
+
         for (let voter of voters) {
             const option = document.createElement("option");
             option.setAttribute("value", voter);
             option.appendChild(document.createTextNode(voter));
             select.appendChild(option);
         }
+
         div.appendChild(select);
 
         select.addEventListener("click", () => {
+            const alert_for_empty_voters =
+                document.getElementById("alert-for-empty-voters");
+
+            if (alert_for_empty_voters) {
+                alert_for_empty_voters.remove();
+            }
+
             const alert_for_duplicate_voters =
                 document.getElementById("alert-for-duplicate-voters");
 
@@ -89,15 +102,28 @@ anyone_can_vote.addEventListener("click", () => {
             select.setAttribute("class", "form-select");
             select.setAttribute("id", `voters-${voter_number}`);
             select.setAttribute("name", `voters[${voter_number}]`);
+
+            const empty_option = document.createElement("option");
+            empty_option.setAttribute("value", "");
+            select.appendChild(empty_option);
+
             for (let voter of voters) {
                 const option = document.createElement("option");
                 option.setAttribute("value", voter);
                 option.appendChild(document.createTextNode(voter));
                 select.appendChild(option);
             }
+
             div.appendChild(select);
 
             select.addEventListener("click", () => {
+                const alert_for_empty_voters =
+                    document.getElementById("alert-for-empty-voters");
+
+                if (alert_for_empty_voters) {
+                    alert_for_empty_voters.remove();
+                }
+
                 const alert_for_duplicate_voters =
                     document.getElementById("alert-for-duplicate-voters");
 
