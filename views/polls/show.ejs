@@ -139,11 +139,11 @@
             </div>
             <% } %>
             <% } %>
-        </div>
 
-        <div class="row">
             <% if ((current_user) && (((poll.organiser.equals(current_user)) && (poll.organiser_can_vote)) || (!(poll.organiser.equals(current_user)) && ((poll.anyone_can_vote) || (current_user_is_eligible))))) { %>
-            Cast Vote
+            <div class="col-12 mb-3">
+                Cast Vote
+            </div>
             <% } %>
         </div>
     </div>
