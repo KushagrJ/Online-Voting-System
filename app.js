@@ -16,7 +16,7 @@ const User = require("./models/user");
 const ExpressError = require("./utils/express-error");
 
 const poll_routes = require("./routes/polls");
-// const vote_routes = require("./routes/votes");
+const vote_routes = require("./routes/votes");
 const user_routes = require("./routes/users");
 
 mongoose.connect("mongodb://127.0.0.1:27017/online-voting-system");
@@ -62,7 +62,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/polls", poll_routes);
-// app.use("/polls/:id/votes", vote_routes);
+app.use("/polls/:id/votes", vote_routes);
 app.use(user_routes);
 
 app.all("*", (req, res, next) => {

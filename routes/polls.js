@@ -5,12 +5,24 @@ const Poll = require("../models/poll");
 const User = require("../models/user");
 const Vote = require("../models/vote");
 
-const { is_logged_in, is_existing_poll, is_poll_organiser } =
+const { is_logged_in, is_existing_poll, is_poll_organiser, poll_is_ongoing } =
     require("../utils/middleware-functions");
 
 const multer = require("multer");
 const { storage, cloudinary } = require("../utils/multer-and-cloudinary");
 const upload = multer({ storage });
+
+router.get("/", async (req, res, next) => {
+    try {
+        const polls = await Poll.find({});
+
+        res.render("polls/index", {
+            polls
+        });
+    } catch (err) {
+        next(err);
+    }
+});
 
 router.get("/new", is_logged_in, async (req, res, next) => {
     try {
@@ -102,7 +114,7 @@ router.get("/:id", is_existing_poll, async (req, res, next) => {
 });
 
 router.get("/:id/edit", is_logged_in, is_existing_poll, is_poll_organiser,
-    async (req, res, next) => {
+    poll_is_ongoing, async (req, res, next) => {
         try {
             let voters = await User.find({}).distinct("username");
             voters = voters.filter(item => item !== req.user.username);
@@ -120,7 +132,7 @@ router.get("/:id/edit", is_logged_in, is_existing_poll, is_poll_organiser,
 );
 
 router.put("/:id", is_logged_in, is_existing_poll, is_poll_organiser,
-    upload.any(), async (req, res, next) => {
+    poll_is_ongoing, upload.any(), async (req, res, next) => {
         try {
             const poll = await Poll.findOne({
                 _id: req.params.id
@@ -261,6 +273,19 @@ router.put("/:id", is_logged_in, is_existing_poll, is_poll_organiser,
 
             req.flash("success", "Successfully updated the poll!");
             res.redirect(`/polls/${poll._id}`);
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
+router.delete("/:id", is_logged_in, is_existing_poll, is_poll_organiser,
+    async (req, res, next) => {
+        try {
+            await Poll.findByIdAndDelete(req.params.id);
+
+            req.flash("success", "Successfully deleted the poll!");
+            res.redirect("/polls");
         } catch (err) {
             next(err);
         }

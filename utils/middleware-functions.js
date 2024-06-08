@@ -46,6 +46,15 @@ module.exports.is_poll_organiser = (req, res, next) => {
     }
 };
 
+module.exports.poll_is_ongoing = (req, res, next) => {
+    if (!(res.locals.poll) || (res.locals.poll.concluded)) {
+        req.flash("error", "The poll has been concluded!");
+        res.redirect(`/polls/${res.locals.poll._id}`);
+    } else {
+        next();
+    }
+};
+
 module.exports.is_existing_vote = async (req, res, next) => {
     try {
         const vote = await Vote.findById(req.params.vote_id);

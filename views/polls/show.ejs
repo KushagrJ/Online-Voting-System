@@ -50,9 +50,8 @@
                     <div class="card-body">
                         <% if (!(poll.concluded)) { %>
                         <a class="card-link btn btn-primary" href="/polls/<%= poll._id %>/conclude">Conclude</a>
-                        <% } %>
-
                         <a class="ms-1 card-link btn btn-info" href="/polls/<%= poll._id %>/edit">Edit</a>
+                        <% } %>
 
                         <form class="ms-1 d-inline" action="/polls/<%= poll._id %>?_method=DELETE" method="POST">
                             <button class="btn btn-danger">Delete</button>
@@ -148,24 +147,24 @@
             <% } %>
             <% } %>
 
-            <% if ((current_user) && (((poll.organiser.equals(current_user)) && (poll.organiser_can_vote)) || (!(poll.organiser.equals(current_user)) && ((poll.anyone_can_vote) || (current_user_is_eligible)))) && !(current_user_has_already_voted)) { %>
+            <% if (!(poll.concluded) && (current_user) && (((poll.organiser.equals(current_user)) && (poll.organiser_can_vote)) || (!(poll.organiser.equals(current_user)) && ((poll.anyone_can_vote) || (current_user_is_eligible)))) && !(current_user_has_already_voted)) { %>
             <div class="col-12 mt-1 mb-3">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title mb-3">Cast a vote!</h5>
 
-                        <form action="/polls/<%= poll._id %>/votes" method="POST">
+                        <form action="/polls/<%= poll._id %>/votes" method="POST" id="vote-form">
                             <% for (let x = 0; x < poll.candidates.length; ++x) { %>
                             <input class="btn-check" type="<%= poll.multiple_votes_allowed ? "checkbox" : "radio" %>"
                                 id="candidates-<%= x %>"
-                                name="<%= poll.multiple_votes_allowed ? `candidates[${x}]` : "candidate" %>"
-                                autocomplete="off">
+                                name="<%= poll.multiple_votes_allowed ? `candidates-${x}` : "candidate" %>"
+                                <%= poll.multiple_votes_allowed ? "" : `value=${x}` %> autocomplete="off">
 
                             <label class="btn btn-outline-primary mb-3 me-1" for="candidates-<%= x %>">
                                 <%= x + 1 %>. <%= poll.candidates[x].title %>
                             </label>
                             <% } %>
-                            <button class="btn btn-success">Submit</button>
+                            <span class="btn btn-success" id="submit-vote">Submit</span>
                         </form>
                     </div>
                 </div>
@@ -174,3 +173,9 @@
         </div>
     </div>
 </div>
+
+<script>
+    const number_of_candidates = <%= poll.candidates.length %>;
+</script>
+
+<script src="/scripts/ensure-stuff-2.js"></script>
