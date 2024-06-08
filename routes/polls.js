@@ -177,9 +177,9 @@ router.put("/:id", is_logged_in, is_existing_poll, is_poll_organiser,
                         candidate: poll.candidates[i]._id
                     });
 
-                    for (let i = poll.votes.length - 1; i >= 0; --i) {
-                        if (!(await Vote.findById(poll.votes[i]))) {
-                            poll.votes.splice(i, 1);
+                    for (let j = poll.votes.length - 1; j >= 0; --j) {
+                        if (!(await Vote.findById(poll.votes[j]))) {
+                            poll.votes.splice(j, 1);
                         }
                     }
                 } else {
