@@ -144,16 +144,23 @@ router.put("/:id", is_logged_in, is_existing_poll, is_poll_organiser,
             const multiple_votes_allowed =
                 Object.hasOwn(req.body, "multiple-votes-allowed");
             if (multiple_votes_allowed !== poll.multiple_votes_allowed) {
-                Vote.deleteMany({});
+                await Vote.deleteMany({});
+                poll.votes = [];
             }
             poll.multiple_votes_allowed = multiple_votes_allowed;
 
             poll.organiser_can_vote =
                 Object.hasOwn(req.body, "organiser-can-vote");
             if (!(poll.organiser_can_vote)) {
-                Vote.deleteMany({
+                await Vote.deleteMany({
                     voter: poll.organiser
                 });
+
+                for (let i = poll.votes.length - 1; i >= 0; --i) {
+                    if (!(await Vote.findById(poll.votes[i]))) {
+                        poll.votes.splice(i, 1);
+                    }
+                }
             }
 
             poll.ongoing_poll_results_visible =
@@ -169,6 +176,12 @@ router.put("/:id", is_logged_in, is_existing_poll, is_poll_organiser,
                     await Vote.deleteMany({
                         candidate: poll.candidates[i]._id
                     });
+
+                    for (let i = poll.votes.length - 1; i >= 0; --i) {
+                        if (!(await Vote.findById(poll.votes[i]))) {
+                            poll.votes.splice(i, 1);
+                        }
+                    }
                 } else {
                     poll.candidates[i].title = req.body.candidates[i].title;
                     poll.candidates[i].description =
@@ -261,6 +274,12 @@ router.put("/:id", is_logged_in, is_existing_poll, is_poll_organiser,
                         $nin: poll.voters
                     }
                 });
+
+                for (let i = poll.votes.length - 1; i >= 0; --i) {
+                    if (!(await Vote.findById(poll.votes[i]))) {
+                        poll.votes.splice(i, 1);
+                    }
+                }
             }
 
             for (let i = poll.candidates.length - 1; i >= 0; --i) {

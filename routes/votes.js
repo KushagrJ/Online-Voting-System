@@ -14,7 +14,7 @@ router.post("/", is_logged_in, is_existing_poll, poll_is_ongoing,
                     if (Object.hasOwn(req.body, `candidates-${i}`)) {
                         const vote = new Vote();
                         vote.voter = req.user._id;
-                        vote.candidate = res.locals.candidates[i]._id;
+                        vote.candidate = res.locals.poll.candidates[i]._id;
 
                         res.locals.poll.votes.push(vote);
 
@@ -26,7 +26,7 @@ router.post("/", is_logged_in, is_existing_poll, poll_is_ongoing,
                 const vote = new Vote();
                 vote.voter = req.user._id;
                 vote.candidate =
-                    res.locals.candidates[Number(req.body.candidate)]._id;
+                    res.locals.poll.candidates[Number(req.body.candidate)]._id;
 
                 res.locals.poll.votes.push(vote);
 
@@ -35,7 +35,7 @@ router.post("/", is_logged_in, is_existing_poll, poll_is_ongoing,
             }
 
             req.flash("success", "Successfully submitted your vote!");
-            res.redirect(`/restaurants/${req.params.id}`)
+            res.redirect(`/polls/${req.params.id}`)
         } catch (err) {
             next(err);
         }
@@ -55,10 +55,10 @@ router.delete("/:vote_id", is_logged_in, is_existing_poll, is_existing_vote,
 
             await res.locals.poll.save();
 
-            await Review.findByIdAndDelete(req.params.review_id);
+            await Vote.findByIdAndDelete(req.params.vote_id);
 
             req.flash("success", "Successfully deleted the vote!");
-            res.redirect(`/restaurants/${req.params.id}`);
+            res.redirect(`/polls/${req.params.id}`);
         } catch (err) {
             next(err);
         }
