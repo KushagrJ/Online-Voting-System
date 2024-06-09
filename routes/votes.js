@@ -45,17 +45,15 @@ router.post("/", is_logged_in, is_existing_poll, poll_is_ongoing,
 router.delete("/:vote_id", is_logged_in, is_existing_poll, is_existing_vote,
     is_vote_voter, poll_is_ongoing, async (req, res, next) => {
         try {
+            await Vote.findByIdAndDelete(req.params.vote_id);
+
             for (let i = res.locals.poll.votes.length - 1; i >= 0; --i) {
-                if (res.locals.poll.votes[i]._id.toString() ===
-                    req.params.vote_id) {
-                    res.locals.poll.votes.splice(i, 1);
-                    break;
+                if (!(await Vote.findById(poll.votes[i]))) {
+                    poll.votes.splice(i, 1);
                 }
             }
 
             await res.locals.poll.save();
-
-            await Vote.findByIdAndDelete(req.params.vote_id);
 
             req.flash("success", "Successfully deleted the vote!");
             res.redirect(`/polls/${req.params.id}`);

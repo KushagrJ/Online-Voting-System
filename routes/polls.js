@@ -269,11 +269,19 @@ router.put("/:id", is_logged_in, is_existing_poll, is_poll_organiser,
                     }
                 }
 
+                if (poll.organiser_can_vote) {
+                    poll.voters.push(poll.organiser);
+                }
+
                 await Vote.deleteMany({
                     voter: {
                         $nin: poll.voters
                     }
                 });
+
+                if (poll.organiser_can_vote) {
+                    poll.voters.pop();
+                }
 
                 for (let i = poll.votes.length - 1; i >= 0; --i) {
                     if (!(await Vote.findById(poll.votes[i]))) {
