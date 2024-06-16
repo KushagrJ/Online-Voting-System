@@ -157,16 +157,79 @@
                 </div>
             </div>
             <% } %>
+
+            <% if ((current_user) && ((poll.organiser.equals(current_user)) || (poll.anyone_can_vote) || (current_user_is_eligible))) { %>
+            <% if (((poll.concluded) || (poll.ongoing_poll_results_visible)) && !(poll.anonymous_votes)) { %>
+            <div class="col-12 mt-1 mb-3">
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button">
+                                All Votes
+                            </button>
+                        </h2>
+                    </div>
+
+                    <% for (let i = 0; i < poll.candidates.length; ++i) { %>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" id="collapse-candidates-<%= i %>-button"
+                                type="button" data-bs-toggle="collapse" data-bs-target="#collapse-candidates-<%= i %>">
+                                <%= i + 1 %>. <%= poll.candidates[i].title %>
+                            </button>
+                        </h2>
+
+                        <div id="collapse-candidates-<%= i %>" class="accordion-collapse collapse"
+                            data-bs-parent="#collapse-candidates-<%= i %>-button">
+                            <div class="accordion-body">
+                                <ul class="list-group list-group-flush">
+                                    <% for (let vote of poll.votes) { %>
+                                    <% if (poll.candidates[i].equals(vote.candidate)) { %>
+                                    <li class="list-group-item"><%= vote.voter.username %></li>
+                                    <% } %>
+                                    <% } %>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+            <% } %>
+            <% } %>
         </div>
     </div>
 
     <div class="col-4">
         <div class="row">
+            <% if ((current_user) && ((poll.organiser.equals(current_user)) || (poll.anyone_can_vote) || (current_user_is_eligible))) { %>
+            <div class="col-12 mb-3">
+                <% if ((poll.concluded) || (poll.ongoing_poll_results_visible)) { %>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Results</h5>
+
+                        <div>
+                            <canvas id="results-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <% } else { %>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-0">The results will be available after the poll has been concluded!
+                        </h5>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+            <% } %>
+
             <% if ((current_user) && (((poll.organiser.equals(current_user)) && (poll.organiser_can_vote)) || (!(poll.organiser.equals(current_user)) && ((poll.anyone_can_vote) || (current_user_is_eligible)))) && (current_user_has_already_voted)) { %>
             <div class="col-12 mb-3">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title mb-3">Past Votes</h5>
+                        <h5 class="card-title mb-0">Past Votes (by you)</h5>
                     </div>
 
                     <ul class="list-group list-group-flush d-flex">
@@ -194,6 +257,10 @@
 
 <script>
     const number_of_candidates = <%= poll.candidates.length %>;
+    const poll = <%- JSON.stringify(poll) %>;
 </script>
 
 <script src="/scripts/ensure-stuff-2.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/scripts/results-chart.js"></script>
