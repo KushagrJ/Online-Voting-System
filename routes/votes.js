@@ -48,8 +48,8 @@ router.delete("/:vote_id", is_logged_in, is_existing_poll, is_existing_vote,
             await Vote.findByIdAndDelete(req.params.vote_id);
 
             for (let i = res.locals.poll.votes.length - 1; i >= 0; --i) {
-                if (!(await Vote.findById(poll.votes[i]))) {
-                    poll.votes.splice(i, 1);
+                if (!(await Vote.findById(res.locals.poll.votes[i]))) {
+                    res.locals.poll.votes.splice(i, 1);
                 }
             }
 
