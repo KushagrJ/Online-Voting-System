@@ -1,0 +1,53 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="row">
+    <div class="col-5 offset-1">
+        <h2 class="mb-4 text-center">Ongoing Polls</h2>
+
+        <% for (let poll of polls) { %>
+        <% if (!(poll.concluded)) { %>
+        <div class="card mb-3">
+            <div class="row">
+                <div class="col-5">
+                    <img class="img-fluid"
+                        src="<%= poll.images.length > 0 ? (((poll.images)[0]).url).replace("/upload", "/upload/w_1280,h_720,c_fill") : "https://res.cloudinary.com/dyhzti25i/image/upload/v1717773936/Online-Voting-System/0_fqcbnb.jpg".replace("/upload", "/upload/w_1280,h_720,c_fill") %>"
+                        alt="">
+                </div>
+
+                <div class="col-7">
+                    <div class="card-body">
+                        <a class="btn btn-primary mb-3" href="/polls/<%= poll._id %>"><%= poll.title %></a>
+                        <p class="card-text"><%= poll.description.substring(0, 20) %> ...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% } %>
+        <% } %>
+    </div>
+
+    <div class="col-5">
+        <h2 class="mb-4 text-center">Concluded Polls</h2>
+
+        <% for (let poll of polls) { %>
+        <% if (poll.concluded) { %>
+        <div class="card mb-3">
+            <div class="row">
+                <div class="col-5">
+                    <img class="img-fluid"
+                        src="<%= poll.images.length > 0 ? (((poll.images)[0]).url).replace("/upload", "/upload/w_1280,h_720,c_fill") : "https://res.cloudinary.com/dyhzti25i/image/upload/v1717773936/Online-Voting-System/0_fqcbnb.jpg".replace("/upload", "/upload/w_1280,h_720,c_fill") %>"
+                        alt="">
+                </div>
+
+                <div class="col-7">
+                    <div class="card-body">
+                        <a class="btn btn-primary mb-3" href="/polls/<%= poll._id %>"><%= poll.title %></a>
+                        <p class="card-text"><%= poll.description.substring(0, 20) %> ...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% } %>
+        <% } %>
+    </div>
+</div>
