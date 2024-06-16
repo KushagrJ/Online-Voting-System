@@ -65,6 +65,10 @@ app.use("/polls", poll_routes);
 app.use("/polls/:id/votes", vote_routes);
 app.use(user_routes);
 
+app.get("/", (req, res) => {
+    res.render("home");
+});
+
 app.all("*", (req, res, next) => {
     next(new ExpressError(404, "Page Not Found!"));
 });

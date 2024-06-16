@@ -16,7 +16,8 @@
 
                 <div class="col-7">
                     <div class="card-body">
-                        <a class="btn btn-primary mb-3" href="/polls/<%= poll._id %>"><%= poll.title %></a>
+                        <a class="btn btn-primary mb-3" href="/polls/<%= poll._id %>"><%= poll.title.substring(0, 20) %>
+                            ...</a>
                         <p class="card-text"><%= poll.description.substring(0, 20) %> ...</p>
                     </div>
                 </div>
@@ -41,7 +42,8 @@
 
                 <div class="col-7">
                     <div class="card-body">
-                        <a class="btn btn-primary mb-3" href="/polls/<%= poll._id %>"><%= poll.title %></a>
+                        <a class="btn btn-primary mb-3" href="/polls/<%= poll._id %>"><%= poll.title.substring(0, 20) %>
+                            ...</a>
                         <p class="card-text"><%= poll.description.substring(0, 20) %> ...</p>
                     </div>
                 </div>

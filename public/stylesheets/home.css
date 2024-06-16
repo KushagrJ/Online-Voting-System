@@ -1,0 +1,31 @@
+body {
+    height: 100vh;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)),
+        url("https://res.cloudinary.com/dyhzti25i/image/upload/v1717773936/Online-Voting-System/0_fqcbnb.jpg");
+    background-size: cover;
+    background-position: center;
+
+}
+
+.cover-container {
+    max-width: 60vw;
+}
+
+.nav-link {
+    padding: 0.25rem 0;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.5);
+    margin-left: 1rem;
+    border-bottom: 0.25rem solid transparent;
+}
+
+.nav-link:hover {
+    color: rgba(255, 255, 255, 0.5);
+    border-bottom-color: rgba(255, 255, 255, 0.5);
+}
+
+.btn-secondary,
+.btn-secondary:hover {
+    color: #333;
+    font-weight: 500;
+}
