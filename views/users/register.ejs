@@ -17,7 +17,10 @@
 
             <div class="mb-4">
                 <label class="form-label" for="password">Password</label>
-                <input class="form-control" type="password" id="password" name="password" required>
+                <input class="form-control" type="password"
+                    pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$"
+                    placeholder="Min. 8 characters, at least 1 number and 1 special character" id="password"
+                    name="password" required>
             </div>
 
             <div class="mb-3">

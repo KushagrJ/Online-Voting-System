@@ -41,6 +41,7 @@ add_candidate_button.addEventListener("click", () => {
     images_input.setAttribute("type", "file");
     images_input.setAttribute("id", `candidates-${candidate_number}-images`);
     images_input.setAttribute("name", `candidates-${candidate_number}-images`);
+    images_input.setAttribute("accept", ".jpg,.jpeg,.png");
     images_input.multiple = true;
     images_div.appendChild(images_input);
 
