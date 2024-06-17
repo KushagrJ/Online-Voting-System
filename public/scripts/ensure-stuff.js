@@ -111,8 +111,8 @@ add_or_update_poll_button.addEventListener("click", () => {
             if (voter_select.options[voter_select.selectedIndex].value === "") {
                 if (!(document.getElementById("alert-for-empty-voters"))) {
                     const div = document.createElement("div");
-                    div.setAttribute("class", "alert alert-danger alert-dismissible " +
-                        "fade show");
+                    div.setAttribute("class", "alert alert-danger " +
+                        "alert-dismissible fade show");
                     div.setAttribute("id", "alert-for-empty-voters");
                     div.setAttribute("role", "alert");
                     add_or_update_poll_button.parentNode.insertBefore(div,

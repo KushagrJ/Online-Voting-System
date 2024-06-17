@@ -35,8 +35,6 @@ IMPORTANT POINTS -
     WILL NOT BE SHOWN FOR ONGOING POLLS, IRRESPECTIVE OF THE VALUE OF
     ANONYMOUS_VOTES.
 
-THOROUGH TESTING TO BE DONE AFTER COMPLETING THE PROJECT.
-
 Types of viewers of show page -
 1. Organiser, Eligible Voter (determined by b)
 2. Organiser, Non-Eligible Voter (determined by b)

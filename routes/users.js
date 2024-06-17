@@ -41,10 +41,11 @@ router.post("/login", store_return_to,
         failureFlash: true,
         failureRedirect: "/login"
     }), (req, res) => {
-        req.flash("success",
-            "Successfully logged you in! Welcome back to Online Voting System!");
+        req.flash("success", "Successfully logged you in! " +
+            "Welcome back to Online Voting System!");
         res.redirect(res.locals.return_to || "/polls");
-    });
+    }
+);
 
 router.get("/logout", (req, res, next) => {
     req.logout(err => {
